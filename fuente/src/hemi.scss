@@ -1,0 +1,1009 @@
+// HEMICICLO — CSS de la app (consume SYX con el tema «hemiciclo»)
+// Concepto: la noche del escrutinio. El scroll es el recuento.
+// Solo los mixins de SYX: el resto lo trae la hoja del tema.
+@use 'syx-design-system/scss/abstracts/mixins/mixins' as *;
+
+@layer syx.reset, syx.base, syx.tokens, syx.atoms, syx.molecules, syx.organisms, syx.app, syx.utilities;
+
+// ── Paso 1 · tokens del proyecto: leen roles semánticos; longitudes y familias literales permitidas ──
+:root {
+  // Layout
+  --hemi-page-max: 90rem;
+  --hemi-gutter: clamp(1rem, 4vw, 3.5rem);
+  --hemi-measure: 36rem;
+  --hemi-header-h: 3.25rem;
+  --hemi-anchor-offset: 4.5rem;
+  --hemi-rule: var(--semantic-border-width-thin) solid var(--semantic-color-border-default);
+  --hemi-rule-strong: var(--semantic-border-width-thick) solid var(--semantic-color-text-primary);
+  --hemi-rule-heavy: 0.5rem solid var(--semantic-color-text-primary);
+
+  // Superficies y tintas
+  --hemi-bg: var(--semantic-color-bg-primary);
+  --hemi-bg-band: var(--semantic-color-bg-secondary);
+  --hemi-ink: var(--semantic-color-text-primary);
+  --hemi-ink-soft: var(--semantic-color-text-secondary);
+  --hemi-ink-faint: var(--semantic-color-text-tertiary);
+  --hemi-marker: var(--semantic-color-secondary);
+  --hemi-on-marker: var(--semantic-color-on-secondary);
+  --hemi-emphasis-bg: var(--semantic-color-bg-emphasis);
+  --hemi-emphasis-fg: var(--semantic-color-on-emphasis);
+  --hemi-seat-empty: var(--semantic-color-border-default);
+  --hemi-iso-slab: var(--semantic-color-border-strong);
+  --hemi-ink-dark: var(--semantic-color-ink-dark);
+  --hemi-ink-light: var(--semantic-color-ink-light);
+
+  // Tipografía
+  --hemi-font-display: var(--semantic-font-family-heading);
+  --hemi-font-numeral: "Big Shoulders Stencil Display", var(--semantic-font-family-heading);
+  --hemi-font-body: var(--semantic-font-family-primary);
+  --hemi-font-mono: var(--semantic-font-family-mono);
+  --hemi-mega-size: min(18.5vw, 15.5rem);
+  --hemi-h2-size: clamp(2.75rem, 8vw, 7rem);
+  // Medidas relativas al escenario (container query): la cifra cabe siempre en el arco
+  --hemi-numeral-size: 15cqi;
+  --hemi-numeral-leading: 0.82;
+  --hemi-readout-lift: 0;
+  --hemi-panel-numeral-size: clamp(7rem, 26vw, 19rem);
+  --hemi-dek-size: clamp(1.125rem, 1.7vw, 1.5rem);
+  --hemi-label-size: 0.75rem;
+  --hemi-wordmark-size: clamp(1.125rem, 3.6vw, 1.75rem);
+  --hemi-label-tracking: 0.14em;
+  --hemi-mega-leading: 0.8; // solo el titular del héroe: cada línea es un bloque propio con hueco para tildes
+  // Titulares que parten en varias líneas: mayúsculas condensadas con tildes (Í, Ó)
+  // y comas. Medido con las métricas de tinta de la fuente: por debajo de 0,97
+  // la coma de una línea toca la tilde de la siguiente.
+  --hemi-heading-leading: 1.06;
+  --hemi-accent-room: 0.16em;
+
+  // Escenarios
+  --hemi-step-min: 78vh;
+  --hemi-verdict-size: clamp(1.5rem, 3vw, 2.25rem);
+  --hemi-bar-h: 0.625rem;
+  --hemi-strip-h: 2.5rem;
+  --hemi-strip-gap: 1px;
+  --hemi-majority-x: calc(176 / 350 * 100%);
+  // Valores por defecto de lo que el dato pone en línea (ancho y color de cada tramo)
+  --hemi-vote-w: 0%;
+  --hemi-strip-w: 0%;
+  --hemi-strip-c: var(--semantic-color-text-primary);
+  --hemi-urn-max: 16rem;
+  --hemi-step-shadow-offset: 0.5rem;
+  --hemi-panel-w: min(86vw, 34rem);
+  --hemi-panel-h: min(60vh, 38rem);
+  --hemi-panel-min-h: 30rem;
+  --hemi-list-pad: 0.2rem;
+  --hemi-panel-name-size: clamp(2.5rem, 6vw, 4.5rem);
+  --hemi-panel-name-pinned: clamp(2rem, 5vh, 3.25rem);
+  --hemi-panel-numeral-pinned: clamp(5.5rem, 21vh, 14rem);
+  --hemi-night-title-size: clamp(2.5rem, 5vw, 4.75rem);
+  --hemi-chart-height: 28rem;
+  --hemi-chart-height-sm: 22rem;
+  --hemi-chart-height-tall: 34rem;
+  --hemi-progress-h: 0.25rem;
+}
+
+// En oscuro, los escaños vacíos suben de tono y la losa baja: si no, el «no»
+// se pierde contra el fondo. Las dos entradas al modo oscuro, como SYX.
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --hemi-seat-empty: var(--semantic-color-border-strong);
+    --hemi-iso-slab: var(--semantic-color-border-default);
+  }
+}
+
+:root[data-theme="dark"] {
+  --hemi-seat-empty: var(--semantic-color-border-strong);
+  --hemi-iso-slab: var(--semantic-color-border-default);
+}
+
+// ── Paso 2 · reglas: solo leen --hemi-* ──
+@layer syx.app {
+  /* syx-reuse: checked layout-grid (12 cols, sin columna de etiqueta fija) — página editorial a sangre */
+  .hemi-page {
+    background: var(--hemi-bg);
+    color: var(--hemi-ink);
+    font-family: var(--hemi-font-body);
+    overflow-x: clip;
+  }
+
+  /* syx-reuse: checked layout-grid (rejilla de 12 con su max-width) — contenedor centrado con gutter fluido */
+  .hemi-wrap {
+    inline-size: 100%;
+    max-inline-size: var(--hemi-page-max);
+    margin-inline: auto;
+    padding-inline: var(--hemi-gutter);
+    box-sizing: border-box;
+  }
+
+  /* syx-reuse: checked atom-label (duplicada con el label de formulario), atom-pill (badge con caja) — rótulo mono de acta */
+  .hemi-label {
+    font-family: var(--hemi-font-mono);
+    font-size: var(--hemi-label-size);
+    font-weight: var(--semantic-font-weight-medium);
+    letter-spacing: var(--hemi-label-tracking);
+    text-transform: uppercase;
+    color: var(--hemi-ink-soft);
+  }
+
+  // ── Cabecera con el contador de escrutinio ──
+  /* syx-reuse: checked org-site-header (navegación con cajón y selector de tema) — barra de rótulo con contador */
+  .hemi-header {
+    @include sticky($top: env(safe-area-inset-top, 0px));
+    z-index: 20;
+    background: var(--hemi-bg);
+    border-block-end: var(--hemi-rule-strong);
+  }
+
+  .hemi-header__bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--semantic-space-inline-md);
+    min-block-size: var(--hemi-header-h);
+  }
+
+  .hemi-header__count {
+    display: flex;
+    align-items: baseline;
+    gap: var(--semantic-space-inline-xs);
+    margin-inline-start: auto;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .hemi-header__value {
+    font-family: var(--hemi-font-numeral);
+    font-size: var(--hemi-wordmark-size);
+    font-weight: var(--semantic-font-weight-black);
+    line-height: 1;
+    min-inline-size: 3.6em;
+    text-align: end;
+  }
+
+  .hemi-header__progress {
+    @include absolute($right: 0, $bottom: calc(-1 * var(--semantic-border-width-thick)), $left: 0);
+    block-size: var(--hemi-progress-h);
+    background: var(--hemi-marker);
+    transform-origin: left center;
+    transform: scaleX(0);
+  }
+
+  /* syx-reuse: checked org-site-header__brand (solo dentro del header de sitio) — rótulo de marca suelto */
+  .hemi-wordmark {
+    font-family: var(--hemi-font-display);
+    font-weight: var(--semantic-font-weight-black);
+    font-size: var(--hemi-wordmark-size);
+    letter-spacing: var(--hemi-label-tracking);
+    text-transform: uppercase;
+    color: var(--hemi-ink);
+    text-decoration: none;
+  }
+
+  // ── Héroe a sangre ──
+  /* syx-reuse: checked layout-grid, mol-feature-card — pila editorial con titular a todo el ancho */
+  .hemi-hero {
+    display: grid;
+    gap: var(--semantic-space-stack-lg);
+    padding-block: var(--semantic-space-layout-sm) var(--semantic-space-layout-md);
+  }
+
+  .hemi-hero__title {
+    min-inline-size: 0;
+    margin: 0;
+    font-family: var(--hemi-font-display);
+    font-size: var(--hemi-mega-size);
+    font-weight: var(--semantic-font-weight-black);
+    line-height: var(--hemi-mega-leading);
+    letter-spacing: -0.01em;
+    text-transform: uppercase;
+  }
+
+  // La línea recorta la entrada animada; el padding superior deja sitio a
+  // las tildes (GANÓ) y el margen negativo conserva el interlineado prieto.
+  .hemi-hero__line {
+    display: block;
+    overflow: clip;
+    padding-block: var(--hemi-accent-room) 0.04em;
+    margin-block-start: calc(-1 * var(--hemi-accent-room));
+  }
+
+  .hemi-hero__line > span {
+    display: inline-block;
+    white-space: nowrap;
+    font-size: var(--hemi-fit, 1em);
+  }
+
+  .hemi-hero__line--end {
+    text-align: end;
+  }
+
+  .hemi-hero__foot {
+    display: grid;
+    gap: var(--semantic-space-stack-lg);
+    padding-block-start: var(--semantic-space-stack-md);
+    border-block-start: var(--hemi-rule-heavy);
+
+    @include min-screen(56rem) {
+      grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+      align-items: end;
+    }
+  }
+
+  /* syx-reuse: checked atom-txt (sin variante de entradilla) — entradilla de lectura */
+  .hemi-dek {
+    max-inline-size: var(--hemi-measure);
+    margin: 0;
+    font-size: var(--hemi-dek-size);
+    line-height: var(--semantic-line-height-relaxed);
+    color: var(--hemi-ink-soft);
+    text-wrap: pretty;
+  }
+
+  /* syx-reuse: checked atom-pill--warning, syx-font-color-* — trazo de rotulador animado, gesto de marca */
+  .hemi-marker {
+    @include relative();
+    z-index: 0;
+    display: inline-block;
+    color: var(--hemi-on-marker);
+    padding-inline: 0.06em;
+  }
+
+  .hemi-marker__ink {
+    @include absolute($top: 0.06em, $right: 0, $bottom: 0.02em, $left: 0);
+    z-index: -1;
+    background: var(--hemi-marker);
+    transform-origin: left center;
+  }
+
+  /* syx-reuse: checked atom-stat (centrado y con tamaño literal, sin tokens) — marcador de cifras en plantilla */
+  .hemi-scoreboard {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(7.5rem, 1fr));
+    gap: var(--semantic-space-inline-md);
+    margin: 0;
+  }
+
+  .hemi-scoreboard__item {
+    display: grid;
+    gap: var(--semantic-space-stack-xs);
+    padding-inline-start: var(--semantic-space-inline-sm);
+    border-inline-start: var(--hemi-rule-strong);
+  }
+
+  .hemi-scoreboard__value {
+    margin: 0;
+    font-family: var(--hemi-font-numeral);
+    font-size: clamp(2.25rem, 5.5vw, 4.75rem);
+    font-weight: var(--semantic-font-weight-black);
+    line-height: 0.9;
+    font-variant-numeric: tabular-nums;
+  }
+
+  // ── Palotes de recuento ──
+  /* syx-reuse: checked ningún divisor gráfico en SYX — fila de palotes dibujados con SVG */
+  .hemi-tally {
+    display: block;
+    inline-size: 100%;
+    color: var(--hemi-ink);
+  }
+
+  // ── Escrutinio en el hemiciclo (scrollytelling) ──
+  /* syx-reuse: checked mol-tabs (cambia de panel por clic, no por scroll), mol-card — escenario fijo con pasos */
+  .hemi-scrolly {
+    display: grid;
+    padding-block-end: var(--semantic-space-layout-md);
+
+    @include min-screen(64rem) {
+      grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+      gap: var(--semantic-space-inline-lg);
+    }
+  }
+
+  /* syx-reuse: checked mol-card__media — escenario fijo (sticky) con el hemiciclo SVG y su cifra */
+  .hemi-stage {
+    @include sticky($top: calc(env(safe-area-inset-top, 0px) + var(--hemi-header-h)));
+    z-index: 5;
+    display: grid;
+    gap: var(--semantic-space-stack-xs);
+    align-content: start;
+    padding-block: var(--semantic-space-stack-sm);
+    background: var(--hemi-bg);
+    container-type: inline-size;
+
+    @include min-screen(64rem) {
+      grid-column: 2;
+      grid-row: 1;
+      align-self: start;
+      min-block-size: calc(100vh - var(--hemi-header-h));
+      align-content: center;
+    }
+  }
+
+  .hemi-stage__svg {
+    display: block;
+    inline-size: 100%;
+    max-inline-size: 100%;
+    block-size: auto;
+    overflow: visible;
+  }
+
+  .hemi-stage__readout {
+    display: grid;
+    justify-items: center;
+    text-align: center;
+    margin-block-start: var(--hemi-readout-lift);
+    pointer-events: none;
+  }
+
+  .hemi-stage__number {
+    font-family: var(--hemi-font-numeral);
+    font-size: var(--hemi-numeral-size);
+    font-weight: var(--semantic-font-weight-black);
+    line-height: var(--hemi-numeral-leading);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .hemi-stage__caption {
+    max-inline-size: 22rem;
+    font-size: var(--semantic-font-size-body-small);
+    font-weight: var(--semantic-font-weight-medium);
+    line-height: var(--semantic-line-height-snug);
+    color: var(--hemi-ink-soft);
+    text-wrap: balance;
+  }
+
+  /* syx-reuse: checked atom-list (lista de texto, sin escenario) — pasos del recorrido por scroll */
+  .hemi-steps {
+    display: grid;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+
+    @include min-screen(64rem) {
+      grid-column: 1;
+      grid-row: 1;
+    }
+  }
+
+  /* syx-reuse: checked mol-card (borde y sombra de sistema, sin estado activo por scroll) — tarjeta de paso con estado is-active */
+  .hemi-step {
+    display: grid;
+    align-content: center;
+    min-block-size: var(--hemi-step-min);
+    padding-block: var(--semantic-space-layout-xs);
+  }
+
+  .hemi-step__card {
+    display: grid;
+    gap: var(--semantic-space-stack-sm);
+    padding: var(--semantic-space-component-lg);
+    background: var(--hemi-bg);
+    border: var(--hemi-rule-strong);
+  }
+
+  .hemi-step.is-active .hemi-step__card {
+    border-color: var(--hemi-ink);
+    box-shadow: var(--hemi-step-shadow-offset) var(--hemi-step-shadow-offset) 0 var(--hemi-marker);
+  }
+
+  .hemi-step__title {
+    margin: 0;
+    font-family: var(--hemi-font-display);
+    font-size: clamp(2rem, 4vw, 3.25rem);
+    font-weight: var(--semantic-font-weight-black);
+    line-height: var(--hemi-heading-leading);
+    text-transform: uppercase;
+    text-wrap: balance;
+  }
+
+  /* syx-reuse: checked atom-txt (sin medida ni color secundario) — párrafo de lectura */
+  .hemi-prose {
+    max-inline-size: var(--hemi-measure);
+    margin: 0;
+    line-height: var(--semantic-line-height-relaxed);
+    color: var(--hemi-ink-soft);
+    text-wrap: pretty;
+  }
+
+  .hemi-prose strong {
+    color: var(--hemi-ink);
+  }
+
+  /* syx-reuse: checked mol-label-group, atom-pill — leyenda de datos con muestra de color por partido */
+  .hemi-legend {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: var(--semantic-space-inline-xs) var(--semantic-space-inline-md);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    font-size: var(--semantic-font-size-caption);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .hemi-legend__item {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--semantic-space-inline-xs);
+    color: var(--hemi-ink-soft);
+  }
+
+  .hemi-legend__item strong {
+    color: var(--hemi-ink);
+  }
+
+  /* syx-reuse: checked atom-avatar, atom-icon — muestra de color de un dato; el color lo trae el dato */
+  .hemi-swatch {
+    inline-size: 0.75rem;
+    block-size: 0.75rem;
+    border-radius: var(--semantic-border-radius-full);
+    background: var(--hemi-swatch-color, currentColor);
+    flex: none;
+  }
+
+  // ── Cabecera de sección ──
+  /* syx-reuse: checked atom-title (solo tamaño; sin escala display ni rótulo) — cabecera de sección a sangre */
+  .hemi-head {
+    display: grid;
+    gap: var(--semantic-space-stack-sm);
+    padding-block: var(--semantic-space-layout-sm) var(--semantic-space-stack-lg);
+    border-block-start: var(--hemi-rule-heavy);
+  }
+
+  .hemi-head__title {
+    margin: 0;
+    font-family: var(--hemi-font-display);
+    font-size: var(--hemi-h2-size);
+    font-weight: var(--semantic-font-weight-black);
+    line-height: var(--hemi-heading-leading);
+    text-transform: uppercase;
+    text-wrap: balance;
+  }
+
+  // ── Paneles por partido (recorrido lateral) ──
+  /* syx-reuse: checked mol-card, mol-feature-card (piezas iguales sin color de entidad) — paneles a sangre por partido */
+  .hemi-panels {
+    @include relative();
+    padding-block-end: var(--semantic-space-layout-md);
+  }
+
+  // Base (sin JS, móvil o reduced-motion): rejilla que se apila. El recorrido
+  // lateral es la mejora: lo activa GSAP poniendo .is-pinned.
+  .hemi-panels__track {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 20rem), 1fr));
+    gap: var(--semantic-space-stack-md);
+    max-inline-size: var(--hemi-page-max);
+    margin-inline: auto;
+    padding-inline: var(--hemi-gutter);
+    box-sizing: border-box;
+  }
+
+  .hemi-panels.is-pinned .hemi-panels__track {
+    display: flex;
+    inline-size: max-content;
+    max-inline-size: none;
+    gap: var(--semantic-space-inline-lg);
+  }
+
+  .hemi-panels__progress {
+    display: none;
+  }
+
+  .hemi-panels.is-pinned .hemi-panels__progress {
+    @include absolute($top: var(--semantic-space-stack-md), $right: var(--hemi-gutter));
+    display: block;
+  }
+
+  /* syx-reuse: checked mol-card, mol-feature-card (sin color de entidad ni cifra display) — panel a sangre del color del partido */
+  .hemi-panel {
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+    gap: var(--semantic-space-stack-md);
+    padding: var(--semantic-space-component-xl);
+    background: var(--hemi-panel-bg, var(--hemi-emphasis-bg));
+    color: var(--hemi-panel-fg, var(--hemi-emphasis-fg));
+    box-sizing: border-box;
+
+    min-block-size: var(--hemi-panel-min-h);
+  }
+
+  // Fijados, los paneles crecen con su contenido (nunca se desborda el texto
+  // fuera del color del panel) y la cifra se mide por el alto de la ventana.
+  .hemi-panels.is-pinned .hemi-panel {
+    --hemi-panel-numeral-size: var(--hemi-panel-numeral-pinned);
+    inline-size: var(--hemi-panel-w);
+    min-block-size: var(--hemi-panel-h);
+    flex: none;
+    gap: var(--semantic-space-stack-sm);
+    padding: var(--semantic-space-component-lg);
+  }
+
+  .hemi-panels.is-pinned .hemi-panel__name {
+    font-size: var(--hemi-panel-name-pinned);
+  }
+
+  .hemi-panel--intro {
+    background: var(--hemi-bg);
+    color: var(--hemi-ink);
+    border: var(--hemi-rule-strong);
+    align-content: space-between;
+  }
+
+  .hemi-panel__top {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: var(--semantic-space-inline-sm);
+    font-family: var(--hemi-font-mono);
+    font-size: var(--hemi-label-size);
+    letter-spacing: var(--hemi-label-tracking);
+    text-transform: uppercase;
+  }
+
+  .hemi-panel__name {
+    margin: 0;
+    font-family: var(--hemi-font-display);
+    font-size: var(--hemi-panel-name-size);
+    font-weight: var(--semantic-font-weight-black);
+    line-height: var(--hemi-heading-leading);
+    text-transform: uppercase;
+  }
+
+  .hemi-panel__numeral {
+    display: block;
+    margin-block-start: var(--semantic-space-stack-sm);
+    align-self: center;
+    font-family: var(--hemi-font-numeral);
+    font-size: var(--hemi-panel-numeral-size);
+    font-weight: var(--semantic-font-weight-black);
+    line-height: 0.9;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .hemi-panel__facts {
+    display: grid;
+    gap: var(--semantic-space-stack-xs);
+    margin: 0;
+    font-size: var(--semantic-font-size-body-small);
+    line-height: var(--semantic-line-height-normal);
+  }
+
+  // El reset de SYX pinta <p> con el texto secundario del tema: sobre el color
+  // del panel no se lee. Hereda la tinta del panel.
+  .hemi-panel__facts p {
+    margin: 0;
+    color: inherit;
+  }
+
+  .hemi-panel__bar {
+    display: grid;
+    grid-template-columns: 5.5rem minmax(0, 1fr) 3.5rem;
+    align-items: center;
+    gap: var(--semantic-space-inline-xs);
+    font-family: var(--hemi-font-mono);
+    font-size: var(--hemi-label-size);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .hemi-panel__meter {
+    block-size: 0.5rem;
+    background: currentColor;
+    transform-origin: left center;
+  }
+
+  .hemi-panel__list {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--semantic-space-stack-xs) var(--semantic-space-inline-md);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .hemi-panel__list li {
+    display: flex;
+    justify-content: space-between;
+    gap: var(--semantic-space-inline-xs);
+    padding-block-end: var(--hemi-list-pad);
+    border-block-end: var(--semantic-border-width-thin) solid currentColor;
+  }
+
+  // ── Gráficos y bloques de datos ──
+  /* syx-reuse: checked ningún componente de gráfico en SYX (find_capability) — lienzo de ECharts */
+  .hemi-chart {
+    inline-size: 100%;
+    min-inline-size: 0;
+    block-size: var(--hemi-chart-height);
+  }
+
+  .hemi-chart--short {
+    block-size: var(--hemi-chart-height-sm);
+  }
+
+  /* syx-reuse: checked atom-txt, syx-font-size-* — nota al pie de gráfico */
+  .hemi-note {
+    margin: 0;
+    max-inline-size: var(--hemi-measure);
+    font-size: var(--semantic-font-size-caption);
+    line-height: var(--semantic-line-height-normal);
+    color: var(--hemi-ink-faint);
+  }
+
+  /* syx-reuse: checked layout-grid__col-md-* — dos columnas que se apilan sin la rejilla completa */
+  .hemi-split {
+    display: grid;
+    gap: var(--semantic-space-stack-lg);
+    padding-block-end: var(--semantic-space-layout-md);
+
+    @include min-screen(56rem) {
+      grid-template-columns: minmax(0, 4fr) minmax(0, 8fr);
+      gap: var(--semantic-space-inline-lg);
+    }
+  }
+
+  .hemi-split__text {
+    display: grid;
+    align-content: start;
+    gap: var(--semantic-space-stack-md);
+  }
+
+  // ── 29N: banda en negativo con cuenta atrás ──
+  /* syx-reuse: checked mol-card--flat (fondo secundario, no negativo), mol-alert (es un estado) — banda en negativo a sangre */
+  .hemi-night {
+    scroll-margin-block-start: var(--hemi-anchor-offset);
+    background: var(--hemi-emphasis-bg);
+    color: var(--hemi-emphasis-fg);
+    padding-block: var(--semantic-space-layout-md);
+  }
+
+  .hemi-night .hemi-label,
+  .hemi-night .hemi-prose,
+  .hemi-night .hemi-prose strong,
+  .hemi-night .hemi-note {
+    color: var(--hemi-emphasis-fg);
+  }
+
+  .hemi-night__grid {
+    display: grid;
+    gap: var(--semantic-space-stack-lg);
+
+    @include min-screen(56rem) {
+      grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+      gap: var(--semantic-space-inline-lg);
+    }
+  }
+
+  .hemi-night .hemi-head__title {
+    font-size: var(--hemi-night-title-size);
+  }
+
+  /* syx-reuse: checked atom-stat (tamaño literal, centrado) — cuenta atrás a escala de cartel */
+  .hemi-countdown {
+    display: grid;
+    gap: var(--semantic-space-stack-xs);
+  }
+
+  .hemi-countdown__number {
+    font-family: var(--hemi-font-numeral);
+    font-size: min(48vw, 22rem);
+    font-weight: var(--semantic-font-weight-black);
+    line-height: 0.76;
+    color: var(--hemi-marker);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .hemi-countdown__unit {
+    font-family: var(--hemi-font-display);
+    font-size: var(--hemi-h2-size);
+    font-weight: var(--semantic-font-weight-black);
+    line-height: var(--hemi-heading-leading);
+    text-transform: uppercase;
+  }
+
+  /* syx-reuse: checked ningún componente de ilustración en SYX — urna isométrica (kit iso-flat) */
+  .hemi-urn {
+    display: block;
+    inline-size: 100%;
+    max-inline-size: var(--hemi-urn-max);
+    block-size: auto;
+    margin-block-start: var(--semantic-space-stack-md);
+  }
+
+  /* syx-reuse: checked atom-list (sin raíl ni hitos) — calendario con raíl dibujado */
+  .hemi-timeline {
+    @include relative();
+    display: grid;
+    gap: var(--semantic-space-stack-sm);
+    margin: 0;
+    padding: 0 0 0 var(--semantic-space-inline-lg);
+    list-style: none;
+  }
+
+  .hemi-timeline__rail {
+    @include absolute($top: 0, $bottom: 0, $left: 0);
+    inline-size: var(--semantic-border-width-thick);
+    background: currentColor;
+    transform-origin: top center;
+  }
+
+  .hemi-timeline__item {
+    @include relative();
+    display: grid;
+    grid-template-columns: 6.5rem minmax(0, 1fr);
+    gap: var(--semantic-space-inline-sm);
+  }
+
+  .hemi-timeline__dot {
+    @include absolute($top: 0.3rem, $left: calc(-1 * var(--semantic-space-inline-lg)));
+    inline-size: 0.75rem;
+    block-size: 0.75rem;
+    margin-inline-start: calc((var(--semantic-border-width-thick) - 0.75rem) / 2);
+    background: var(--hemi-emphasis-bg);
+    border: var(--semantic-border-width-thick) solid currentColor;
+    box-sizing: border-box;
+  }
+
+  .hemi-timeline__item.is-key .hemi-timeline__dot {
+    background: var(--hemi-marker);
+    border-color: var(--hemi-marker);
+  }
+
+  .hemi-timeline__date {
+    font-family: var(--hemi-font-mono);
+    font-size: var(--semantic-font-size-body-small);
+    font-weight: var(--semantic-font-weight-medium);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .hemi-timeline__text {
+    margin: 0;
+  }
+
+
+  // ── Escenarios: cinco institutos ──
+  /* syx-reuse: checked mol-card__media (sin pie de figura) — figura de gráfico con su leyenda escrita */
+  .hemi-figure-chart {
+    display: grid;
+    gap: var(--semantic-space-stack-sm);
+    min-inline-size: 0;
+    margin: 0;
+  }
+
+  .hemi-figure-chart--wide {
+    padding-block: var(--semantic-space-stack-lg);
+    border-block-start: var(--hemi-rule);
+  }
+
+  .hemi-figure-chart__caption {
+    display: grid;
+    gap: var(--semantic-space-stack-xs);
+  }
+
+  .hemi-chart--tall {
+    block-size: var(--hemi-chart-height-tall);
+  }
+
+  /* syx-reuse: checked mol-tabs (se usa tal cual para elegir instituto) — contenedor del bloque con margen propio */
+  .hemi-polls {
+    margin-block-end: var(--semantic-space-layout-md);
+  }
+
+  /* syx-reuse: checked mol-card (superficie y borde que aquí sobran: el panel ya es la tarjeta) — ficha de un sondeo */
+  .hemi-poll {
+    display: grid;
+    gap: var(--semantic-space-stack-lg);
+  }
+
+  .hemi-poll__head {
+    display: grid;
+    gap: var(--semantic-space-stack-xs);
+  }
+
+  .hemi-poll__verdict {
+    max-inline-size: 48rem;
+    margin: 0;
+    font-family: var(--hemi-font-display);
+    font-size: var(--hemi-verdict-size);
+    font-weight: var(--semantic-font-weight-bold);
+    line-height: var(--semantic-line-height-snug);
+    text-transform: uppercase;
+    text-wrap: balance;
+  }
+
+  .hemi-poll__grid {
+    display: grid;
+    gap: var(--semantic-space-stack-lg);
+
+    @include min-screen(56rem) {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: var(--semantic-space-inline-lg);
+    }
+  }
+
+  .hemi-poll__col {
+    display: grid;
+    align-content: start;
+    gap: var(--semantic-space-stack-sm);
+    min-inline-size: 0;
+  }
+
+  /* syx-reuse: checked atom-progress (una sola barra sin etiqueta ni referencia) — filas de voto con barra y diferencia */
+  .hemi-votes {
+    display: grid;
+    gap: var(--semantic-space-stack-xs);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .hemi-votes__row {
+    display: grid;
+    grid-template-columns: 5.5rem minmax(0, 1fr) 3.5rem;
+    align-items: center;
+    gap: 0 var(--semantic-space-inline-xs);
+    font-size: var(--semantic-font-size-body-small);
+
+    @include min-screen(30rem) {
+      grid-template-columns: 6.5rem minmax(0, 1fr) 3.75rem 5.5rem;
+    }
+  }
+
+  .hemi-votes__name {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--semantic-space-inline-xs);
+    font-weight: var(--semantic-font-weight-bold);
+  }
+
+  .hemi-votes__bar {
+    display: block;
+    block-size: var(--hemi-bar-h);
+    background: var(--hemi-bg-band);
+  }
+
+  .hemi-votes__bar > span {
+    display: block;
+    inline-size: var(--hemi-vote-w);
+    block-size: 100%;
+    background: var(--hemi-strip-c);
+  }
+
+  .hemi-votes__pct {
+    font-family: var(--hemi-font-mono);
+    text-align: end;
+  }
+
+  .hemi-votes__diff {
+    grid-column: 2 / -1;
+    font-family: var(--hemi-font-mono);
+    font-size: var(--hemi-label-size);
+    color: var(--hemi-ink-soft);
+
+    @include min-screen(30rem) {
+      grid-column: auto;
+    }
+  }
+
+  /* syx-reuse: checked atom-progress (un solo valor) — tira de escaños de 350 con la línea de 176 */
+  .hemi-strip {
+    @include relative();
+    display: flex;
+    block-size: var(--hemi-strip-h);
+    gap: var(--hemi-strip-gap);
+    background: var(--hemi-bg-band);
+  }
+
+  .hemi-strip__seg {
+    flex: 0 0 var(--hemi-strip-w);
+    background: var(--hemi-strip-c);
+    transform-origin: left center;
+  }
+
+  .hemi-strip__majority {
+    @include absolute($top: calc(-1 * var(--semantic-space-stack-sm)), $bottom: calc(-1 * var(--semantic-space-stack-sm)), $left: var(--hemi-majority-x));
+    border-inline-start: var(--semantic-border-width-thick) dashed var(--hemi-ink);
+  }
+
+  .hemi-strip__majority > span {
+    @include absolute($bottom: 100%, $left: 0);
+    transform: translateX(-50%);
+    font-family: var(--hemi-font-mono);
+    font-size: var(--hemi-label-size);
+    font-weight: var(--semantic-font-weight-bold);
+  }
+
+  /* syx-reuse: checked atom-list, atom-table (tres filas con estado, no una tabla) — sumas de bloques con su estado */
+  .hemi-blocs {
+    display: grid;
+    gap: var(--semantic-space-stack-xs);
+    margin: var(--semantic-space-stack-sm) 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  /* syx-reuse: checked atom-list, atom-table — fila de bloque: etiqueta, suma y estado */
+  .hemi-bloc {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto auto;
+    align-items: center;
+    gap: var(--semantic-space-inline-sm);
+    padding-block: var(--semantic-space-stack-xs);
+    border-block-end: var(--hemi-rule);
+  }
+
+  .hemi-bloc__label {
+    display: grid;
+    font-weight: var(--semantic-font-weight-bold);
+  }
+
+  .hemi-bloc__label small {
+    font-size: var(--semantic-font-size-caption);
+    font-weight: var(--semantic-font-weight-regular);
+    color: var(--hemi-ink-soft);
+  }
+
+  .hemi-bloc__value {
+    font-family: var(--hemi-font-numeral);
+    font-size: var(--semantic-font-size-h3);
+    font-weight: var(--semantic-font-weight-black);
+    line-height: 1;
+    font-variant-numeric: tabular-nums;
+  }
+
+  // ── Pie y tabla ──
+  /* syx-reuse: checked org-site-header (no hay organismo de pie) — pie con fuentes */
+  .hemi-footer {
+    display: grid;
+    gap: var(--semantic-space-stack-sm);
+    padding-block: var(--semantic-space-layout-sm);
+    border-block-start: var(--hemi-rule-heavy);
+    color: var(--hemi-ink-soft);
+    font-size: var(--semantic-font-size-body-small);
+  }
+
+  .hemi-footer__credit {
+    margin: 0;
+    padding-block-start: var(--semantic-space-stack-sm);
+    border-block-start: var(--hemi-rule);
+    font-size: var(--semantic-font-size-body);
+    color: var(--hemi-ink);
+  }
+
+  /* syx-reuse: checked atom-list — lista de fuentes con sangría propia */
+  .hemi-sources {
+    display: grid;
+    gap: var(--semantic-space-stack-xs);
+    margin: 0;
+    padding-inline-start: var(--semantic-space-inline-md);
+  }
+
+  /* syx-reuse: checked atom-table--resp (desplaza en móvil; aquí cinco columnas caben) — envoltorio del acta */
+  .hemi-acta {
+    --component-table-min-width: 0;
+  }
+
+  /* syx-reuse: checked atom-table__td (sin alineación numérica) — celda numérica tabular */
+  .hemi-num {
+    font-variant-numeric: tabular-nums;
+    text-align: end;
+  }
+
+  /* syx-reuse: checked atom-table__td — nombre de partido con su muestra de color */
+  .hemi-table-swatch {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--semantic-space-inline-xs);
+  }
+
+  /* syx-reuse: checked ningún hook de animación en SYX — marca lo que mueve GSAP */
+  .hemi-reveal {
+    will-change: transform;
+
+    @include reduced-motion {
+      will-change: auto;
+    }
+  }
+}

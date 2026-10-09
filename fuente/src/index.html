@@ -1,0 +1,242 @@
+<title>Hemiciclo 23J</title>
+<meta name="description" content="Las elecciones generales del 23 de julio de 2023 contadas escaño a escaño, y el camino al 29 de noviembre de 2026.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;900&family=Big+Shoulders+Stencil+Display:wght@800;900&family=IBM+Plex+Mono:wght@400;500&family=Public+Sans:ital,wght@0,400;0,600;0,700;1,400&display=swap">
+<style>/*@@THEME_CSS@@*/</style>
+<style>/*@@APP_CSS@@*/</style>
+
+<div class="hemi-page">
+  <header class="hemi-header">
+    <div class="hemi-wrap hemi-header__bar">
+      <a class="hemi-wordmark" href="#inicio">Hemiciclo</a>
+      <div class="hemi-header__count" aria-hidden="true">
+        <span class="hemi-label syx-d-sm-up">Escrutado</span>
+        <span class="hemi-header__value" id="scrutiny">0,00 %</span>
+      </div>
+      <a class="atom-btn atom-btn--primary atom-btn--filled atom-btn--size-sm" href="#29n">29N</a>
+    </div>
+    <div class="hemi-header__progress" id="scrutiny-bar" aria-hidden="true"></div>
+  </header>
+
+  <main id="inicio">
+    <!-- ── HÉROE ── -->
+    <section class="hemi-wrap hemi-hero" aria-labelledby="hero-title">
+      <p class="hemi-label">Elecciones generales · 23 de julio de 2023 · Congreso de los Diputados · 350 escaños</p>
+      <h1 class="hemi-hero__title" id="hero-title">
+        <span class="hemi-hero__line"><span>Ganó el PP.</span></span>
+        <span class="hemi-hero__line hemi-hero__line--end"><span><span class="hemi-marker"><span class="hemi-marker__ink" aria-hidden="true"></span>Gobierna</span></span></span>
+        <span class="hemi-hero__line"><span>el PSOE.</span></span>
+      </h1>
+      <div class="hemi-hero__foot">
+        <p class="hemi-dek">El PP fue el más votado y sumó 137 escaños. La investidura exige 176. Solo Pedro Sánchez los reunió. Este es el recuento, escaño a escaño, de cómo se pasa de ganar a gobernar.</p>
+        <dl class="hemi-scoreboard">
+          <div class="hemi-scoreboard__item">
+            <dt class="hemi-label">PP</dt>
+            <dd class="hemi-scoreboard__value" data-count="137">137</dd>
+          </div>
+          <div class="hemi-scoreboard__item">
+            <dt class="hemi-label">PSOE</dt>
+            <dd class="hemi-scoreboard__value" data-count="121">121</dd>
+          </div>
+          <div class="hemi-scoreboard__item">
+            <dt class="hemi-label">Participación</dt>
+            <dd class="hemi-scoreboard__value" data-count="66.59" data-decimals="2" data-suffix="%">66,59%</dd>
+          </div>
+        </dl>
+      </div>
+    </section>
+
+    <div class="hemi-wrap"><svg class="hemi-tally" data-tally="64" aria-hidden="true"></svg></div>
+
+    <!-- ── ESCRUTINIO ESCAÑO A ESCAÑO ── -->
+    <section class="hemi-wrap hemi-scrolly" aria-label="El hemiciclo, paso a paso">
+      <div class="hemi-stage" aria-live="polite">
+        <svg class="hemi-stage__svg" id="hemicycle" viewBox="-300 -260 600 340" role="img" aria-labelledby="stage-number stage-caption"></svg>
+        <div class="hemi-stage__readout">
+          <span class="hemi-stage__number" id="stage-number">350</span>
+          <span class="hemi-stage__caption" id="stage-caption">escaños en el Congreso</span>
+        </div>
+        <ul class="hemi-legend" id="stage-legend" aria-label="Leyenda del paso actual"></ul>
+      </div>
+
+      <ol class="hemi-steps" id="steps">
+        <li class="hemi-step is-active" data-step="result">
+          <div class="hemi-step__card">
+            <span class="hemi-label">23 jul 2023 · Resultado</span>
+            <h2 class="hemi-step__title">Once partidos en 350 asientos</h2>
+            <p class="hemi-prose">El PP gana con <strong>137 escaños</strong> y el PSOE queda a 16, con 121. Vox es tercero con 33 y Sumar cuarto con 31. Siete partidos más se reparten los 28 restantes. Ninguno se acerca a la mayoría absoluta.</p>
+          </div>
+        </li>
+        <li class="hemi-step" data-step="proportional">
+          <div class="hemi-step__card">
+            <span class="hemi-label">Simulación · reparto proporcional puro</span>
+            <h2 class="hemi-step__title">Si cada voto pesara igual</h2>
+            <p class="hemi-prose">Con una sola circunscripción y sin barrera, el PP tendría <strong id="prop-pp">116</strong> escaños y el PSOE <strong id="prop-psoe">111</strong>. Vox y Sumar subirían a más de 40 cada uno. El reparto por provincias premia a los dos grandes.</p>
+            <p class="hemi-note">Cálculo ilustrativo: restos mayores sobre los votos a candidaturas. No es una propuesta ni un resultado.</p>
+          </div>
+        </li>
+        <li class="hemi-step" data-step="y2019">
+          <div class="hemi-step__card">
+            <span class="hemi-label">10 nov 2019 · La legislatura anterior</span>
+            <h2 class="hemi-step__title">Así estaba el Congreso</h2>
+            <p class="hemi-prose">En 2019 el PP tenía 89 escaños, Vox 52 y Ciudadanos 10. En 2023 el PP sumó 48, Vox perdió 19 y Ciudadanos no se presentó. El PSOE pasó de 120 a 121.</p>
+          </div>
+        </li>
+        <li class="hemi-step" data-step="feijoo">
+          <div class="hemi-step__card">
+            <span class="hemi-label">27 y 29 sep 2023 · Investidura fallida</span>
+            <h2 class="hemi-step__title">A Feijóo le faltaron cuatro</h2>
+            <p class="hemi-prose">PP, Vox, UPN y Coalición Canaria votaron sí: <strong>172</strong>. La mayoría absoluta está en 176 y la simple tampoco llegó en la segunda votación, con 177 noes.</p>
+          </div>
+        </li>
+        <li class="hemi-step" data-step="sanchez">
+          <div class="hemi-step__card">
+            <span class="hemi-label">16 nov 2023 · Investidura</span>
+            <h2 class="hemi-step__title">Sánchez cruza la línea con 179</h2>
+            <p class="hemi-prose">PSOE y Sumar aportaron 152 síes. Los otros 27 llegaron de ERC, Junts, EH Bildu, PNV, BNG y Coalición Canaria. Fue investido en primera votación, con 171 noes.</p>
+          </div>
+        </li>
+        <li class="hemi-step" data-step="reset">
+          <div class="hemi-step__card">
+            <span class="hemi-label">29 nov 2026 · Elecciones anticipadas</span>
+            <h2 class="hemi-step__title">Los 350 vuelven a estar vacíos</h2>
+            <p class="hemi-prose">El 5 de octubre de 2026 Sánchez disolvió las Cortes, nueve meses antes del final de la legislatura. Todos los escaños se vuelven a repartir el 29 de noviembre.</p>
+          </div>
+        </li>
+      </ol>
+    </section>
+
+    <!-- ── PARTIDO A PARTIDO ── -->
+    <section class="hemi-panels" id="panels" aria-labelledby="t-panels">
+      <div class="hemi-wrap">
+        <div class="hemi-head">
+          <span class="hemi-label">Partido a partido · escaños y cambio frente a 2019</span>
+          <h2 class="hemi-head__title hemi-reveal" id="t-panels">Quién llenó el hemiciclo</h2>
+        </div>
+      </div>
+      <span class="hemi-label hemi-panels__progress" id="panels-progress" aria-hidden="true">1 / 5</span>
+      <div class="hemi-panels__track" id="panels-track"></div>
+    </section>
+
+    <!-- ── LA PRIMA ── -->
+    <section class="hemi-wrap" aria-labelledby="t-prop">
+      <div class="hemi-head">
+        <span class="hemi-label">Proporcionalidad · Ley D'Hondt en 52 circunscripciones</span>
+        <h2 class="hemi-head__title hemi-reveal" id="t-prop">Votos frente a escaños</h2>
+      </div>
+      <div class="hemi-split">
+        <div class="hemi-split__text">
+          <p class="hemi-prose">El PP logró el 33,06 % de los votos y el <strong>39,1 % de los escaños</strong>: seis puntos de prima. El PSOE ganó tres. Vox y Sumar, con algo más del 12 % cada uno, se quedaron por debajo del 10 % del hemiciclo. Los partidos territoriales, con el voto concentrado, quedan cerca de su peso real.</p>
+          <p class="hemi-note">Punto hueco: porcentaje del voto válido. Punto relleno: porcentaje de los 350 escaños. La cifra a la derecha es la diferencia en puntos.</p>
+        </div>
+        <div class="hemi-chart" id="chart-prop" role="img" aria-label="Porcentaje de votos frente a porcentaje de escaños por partido. Datos completos en la tabla del final."></div>
+      </div>
+    </section>
+
+    <!-- ── 29N ── -->
+    <section class="hemi-night" id="29n" aria-labelledby="t-29n">
+      <div class="hemi-wrap hemi-night__grid">
+        <div class="hemi-countdown">
+          <span class="hemi-label">Faltan para el domingo 29 de noviembre de 2026</span>
+          <span class="hemi-countdown__number" id="countdown">51</span>
+          <span class="hemi-countdown__unit" id="countdown-unit">días</span>
+          <svg class="hemi-urn" id="urna" viewBox="-110 -170 220 230" role="img" aria-labelledby="urna-title urna-desc"></svg>
+        </div>
+        <div class="hemi-split__text">
+          <h2 class="hemi-head__title hemi-reveal" id="t-29n">La legislatura acaba antes</h2>
+          <p class="hemi-prose">El Congreso tumbó los decretos de vivienda con 172 votos a favor y 178 en contra; PP, Vox, Junts y UPN votaron no. Días después, el 5 de octubre, Sánchez anunció la disolución.</p>
+          <ol class="hemi-timeline" id="timeline">
+            <li class="hemi-timeline__rail" aria-hidden="true"></li>
+            <li class="hemi-timeline__item"><span class="hemi-timeline__dot" aria-hidden="true"></span><span class="hemi-timeline__date">5 oct</span><p class="hemi-timeline__text">Anuncio del adelanto en La Moncloa.</p></li>
+            <li class="hemi-timeline__item"><span class="hemi-timeline__dot" aria-hidden="true"></span><span class="hemi-timeline__date">6 oct</span><p class="hemi-timeline__text">Decreto de disolución en el BOE. Empiezan los 54 días que fija la ley electoral.</p></li>
+            <li class="hemi-timeline__item"><span class="hemi-timeline__dot" aria-hidden="true"></span><span class="hemi-timeline__date">13–27 nov</span><p class="hemi-timeline__text">Campaña electoral.</p></li>
+            <li class="hemi-timeline__item"><span class="hemi-timeline__dot" aria-hidden="true"></span><span class="hemi-timeline__date">23 nov</span><p class="hemi-timeline__text">Último día para publicar encuestas.</p></li>
+            <li class="hemi-timeline__item"><span class="hemi-timeline__dot" aria-hidden="true"></span><span class="hemi-timeline__date">28 nov</span><p class="hemi-timeline__text">Jornada de reflexión.</p></li>
+            <li class="hemi-timeline__item is-key"><span class="hemi-timeline__dot" aria-hidden="true"></span><span class="hemi-timeline__date">29 nov</span><p class="hemi-timeline__text"><strong>Elecciones generales.</strong></p></li>
+            <li class="hemi-timeline__item"><span class="hemi-timeline__dot" aria-hidden="true"></span><span class="hemi-timeline__date">23 dic</span><p class="hemi-timeline__text">Constitución del nuevo Congreso y del Senado.</p></li>
+          </ol>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── ESCENARIOS: CINCO INSTITUTOS ── -->
+    <section class="hemi-wrap" id="escenarios" aria-labelledby="t-polls">
+      <div class="hemi-head">
+        <span class="hemi-label">Sondeos · cinco institutos · septiembre y octubre de 2026</span>
+        <h2 class="hemi-head__title hemi-reveal" id="t-polls">Cinco sondeos, cinco escenarios</h2>
+      </div>
+      <div class="hemi-split">
+        <div class="hemi-split__text">
+          <p class="hemi-prose">Cuatro de los cinco institutos dan ganador al PP; el CIS, al PSOE. Los tres que proyectan escaños coinciden en lo decisivo: <strong>PP y Vox suman mayoría absoluta</strong>, entre 202 y 205 escaños, y el bloque que invistió a Sánchez en 2023 se queda entre 141 y 146.</p>
+          <p class="hemi-note">Elegidos por alcance y regularidad: el CIS (público) y los institutos de los cuatro grandes grupos de prensa con sondeos recientes. NC Report (La Razón) queda fuera porque su último reparto publicado suma 353 escaños. Una encuesta es una estimación con margen de error, no un resultado.</p>
+        </div>
+        <figure class="hemi-figure-chart">
+          <figcaption class="hemi-figure-chart__caption">
+            <span class="hemi-label">Estimación de voto · de dónde viene cada partido y dónde lo sitúa cada instituto</span>
+            <span class="hemi-note">La banda va del sondeo más bajo al más alto; la cifra es la media. El rombo hueco es el 23J y la flecha, el giro hasta la media. Cada línea es la huella de un instituto: pasa el cursor o pulsa un punto para ver su escenario.</span>
+          </figcaption>
+          <div class="hemi-chart hemi-chart--tall" id="chart-range" role="img" aria-label="Estimación de voto de PP, PSOE, Vox, Sumar y Podemos en los cinco institutos: banda de mínimo a máximo, media y resultado de 2023. Los datos de cada instituto están en las pestañas."></div>
+        </figure>
+      </div>
+
+      <figure class="hemi-figure-chart hemi-figure-chart--wide">
+        <figcaption class="hemi-figure-chart__caption">
+          <span class="hemi-label">¿Quién llega a 176? · escaños proyectados por bloque</span>
+          <span class="hemi-note">Solo GAD3, Sigma Dos y SocioMétrica reparten escaños. El CIS y 40dB se leen en votos.</span>
+        </figcaption>
+        <div class="hemi-chart hemi-chart--short" id="chart-majority" role="img" aria-label="Escaños de PP más Vox y del bloque de la investidura de 2023 según GAD3, Sigma Dos y SocioMétrica, frente a la mayoría absoluta de 176."></div>
+      </figure>
+
+      <div class="mol-tabs hemi-polls">
+        <div class="mol-tabs__list" role="tablist" aria-label="Institutos de sondeo" id="polls-tabs"></div>
+        <div id="polls-panels"></div>
+      </div>
+    </section>
+
+    <!-- ── ACTA ── -->
+    <section class="hemi-wrap hemi-split__text" aria-labelledby="t-tabla">
+      <div class="hemi-head">
+        <span class="hemi-label">Escrutinio definitivo · incluye el voto exterior (CERA)</span>
+        <h2 class="hemi-head__title" id="t-tabla">El acta completa</h2>
+      </div>
+      <div class="atom-table__container atom-table--resp hemi-acta" role="region" aria-labelledby="t-tabla" tabindex="0">
+        <table class="atom-table atom-table--primary">
+          <thead>
+            <tr>
+              <th class="atom-table__th" scope="col">Candidatura</th>
+              <th class="atom-table__th hemi-num" scope="col">Votos</th>
+              <th class="atom-table__th hemi-num" scope="col">% voto</th>
+              <th class="atom-table__th hemi-num" scope="col">Escaños</th>
+              <th class="atom-table__th hemi-num" scope="col">Cambio</th>
+            </tr>
+          </thead>
+          <tbody id="results-body"></tbody>
+        </table>
+      </div>
+      <p class="hemi-note">Censo: 37.469.458 · Votos emitidos: 24.952.447 (66,59 %) · Válidos: 24.688.087 · En blanco: 200.673 · Nulos: 264.360. En el Senado, el PP obtuvo 120 de los 208 escaños de elección directa.</p>
+    </section>
+  </main>
+
+  <footer class="hemi-footer hemi-wrap">
+    <span class="hemi-label">Fuentes</span>
+    <ul class="hemi-sources">
+      <li><a class="atom-link atom-link--primary" href="https://es.wikipedia.org/wiki/Elecciones_generales_de_Espa%C3%B1a_de_2023">Elecciones generales de España de 2023 (Wikipedia)</a>: resultados e investiduras.</li>
+      <li><a class="atom-link atom-link--primary" href="https://en.wikipedia.org/wiki/2023_Spanish_general_election">2023 Spanish general election (Wikipedia)</a>: votos, escaños, variación y censo.</li>
+      <li><a class="atom-link atom-link--primary" href="https://www.finect.com/usuario/eduardogarcia/articulos/pedro-sanchez-convoca-elecciones-generales-anticipadas-para-el-29-de-noviembre">Finect, 5 oct 2026</a>: calendario del 29N, votación de los decretos y encuesta de 40dB.</li>
+      <li><a class="atom-link atom-link--primary" href="https://www.diariodeleon.es/nacional/261005/2099326/elecciones-generales-2026-directo-todas-reacciones-adelanto-pedro-sanchez.html">Diario de León, 5 oct 2026</a>: reacciones y referencia al CIS de septiembre.</li>
+      <li><a class="atom-link atom-link--primary" href="https://www.diaridetarragona.com/espana/270587/pp-25-5-recorta-distancias-psoe-31-vox-sube-16-6-crisis-ceuta.html">Diari de Tarragona, 14 sep 2026</a>: estimación del barómetro del CIS de septiembre.</li>
+      <li><a class="atom-link atom-link--primary" href="https://www.electografica.com/2026/10/encuesta-sigmados-261004.html">Electográfica: Sigma Dos para El Mundo</a> y <a class="atom-link atom-link--primary" href="https://www.electografica.com/2026/10/encuesta-sociometrica-261004.html">SocioMétrica para El Español</a> (4 oct 2026): voto y escaños.</li>
+      <li><a class="atom-link atom-link--primary" href="https://sumomento.com/encuestas">Su Momento, tabla de encuestas</a>: GAD3 para ABC y 40dB para El País y la SER.</li>
+      <li><a class="atom-link atom-link--primary" href="https://es.ara.cat/politica/elecciones-generales/dicen-encuestas-elecciones-espanolas-29-n_1_5874092.html">Ara, 9 oct 2026</a>: resumen de los sondeos del 29N.</li>
+    </ul>
+    <p class="hemi-footer__credit">Diseñado y desarrollado por <strong>José Luis Pizarro</strong></p>
+    <p class="hemi-note">Construido sobre el sistema de diseño SYX con el tema «hemiciclo». Gráficos: Apache ECharts. Isometría: kit iso-flat (proyección isométrica real, tres tonos por material). Movimiento: GSAP.</p>
+  </footer>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/echarts/5.5.1/echarts.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script>/*@@APP_JS@@*/</script>
+<script>/*@@SYX_TABS@@*/</script>
